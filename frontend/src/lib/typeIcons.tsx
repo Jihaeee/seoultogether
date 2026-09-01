@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactElement } from "react";
 import Image from "next/image";
 import type { IconType } from "react-icons";
-import { MdDirectionsWalk, MdInfoOutline } from "react-icons/md";
+import { MdDirectionsWalk, MdInfoOutline, MdStroller } from "react-icons/md";
 import { PlaceType } from "@/data/places";
 
 /**
@@ -84,7 +84,36 @@ const ICONS = {
      `public/icons/source/restaurant.png` 는 뒤집기 전 원본이다. 거기서 다시
      내보내면 이 뒤집기가 사라지므로 함께 되살릴 것(DESIGN.md §3 처리 목록). */
   restaurant: { kind: "image", src: "/icons/restaurant.png", w: 292, h: 350 },
-  brand: { kind: "image", src: "/icons/brand.png", w: 288, h: 270 },
+  /* 브랜드 마크 — 유모차.
+     
+     벚꽃 PNG 였다. 두 가지가 어긋나 있었다.
+     
+     **뜻이 겉돌았다.** 이 세트의 나머지는 전부 '무엇이 있는가' 를 그린다 —
+     수유실 · 휠체어 · 문 · 식기 · 걷는 사람. 벚꽃만 장식이라, 지도도 아이도
+     가리키지 않으면서 헤더 맨 앞자리를 차지했다.
+     
+     **비율이 어긋났다.** 원본 타일이 288×270(1.07, 가로가 긴 판)이라 세로가
+     긴 다른 타일(40.2×48 = 0.84) 옆에서 혼자 납작했다. 헤더에서 44px 높이로
+     놓으면 47×44 로 나와 눈썹줄 왼쪽 선도 그만큼 밀렸다.
+     
+     유모차로 바꾼다. 이 서비스를 여는 사람이 실제로 밀고 있는 것이고, 이름이
+     이미 '지도' 라고 말하므로 그림은 '누구를 위한 지도인가' 를 맡으면 된다.
+     걷기·안내와 같은 방식(완성된 글리프를 우리 타일에 얹기)이고, 색은 브랜드
+     계열이다 — 시설 타입 넷 중 어느 것도 아니어야 한다(brand-soft 타일 ·
+     brand-ink 글리프, 4.6:1). */
+  brand: {
+    kind: "glyph",
+    w: 40.2,
+    h: 48,
+    tile: "var(--brand-soft)",
+    radius: 9.6,
+    color: "var(--brand-ink)",
+    Glyph: MdStroller,
+    /* 그림이 24 뷰박스를 거의 꽉 채운다. 엘리베이터 글리프(33)와 키를 맞추려면
+       30 이다 — 걷기(34)보다 작은 것은 걷는 사람이 세로로만 긴 그림이라 같은
+       상자에서 실제로 더 작게 보이기 때문이다. */
+    box: 30,
+  },
   /* 걷기 — 걸어가는 사람. 발자국 두 개를 찍은 PNG 였는데, 다른 아이콘이 전부
      '무엇이 있는가'(수유실 · 휠체어 · 문 · 식기)를 그리는 자리에서 발자국만
      '무엇이 지나갔는가'를 그리고 있었다. 바닥에 남은 자국이라 방향도 읽히지
