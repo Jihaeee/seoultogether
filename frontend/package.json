@@ -6,15 +6,25 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "sync:maplibre": "node -e \"const fs=require('fs');fs.mkdirSync('public/maplibre',{recursive:true});for(const f of ['maplibre-gl-worker.mjs','maplibre-gl-shared.mjs'])fs.copyFileSync('node_modules/maplibre-gl/dist/'+f,'public/maplibre/'+f)\"",
+    "predev": "npm run sync:maplibre",
+    "prebuild": "npm run sync:maplibre"
   },
   "dependencies": {
+    "@maplibre/maplibre-gl-leaflet": "^0.1.4",
+    "@types/leaflet.markercluster": "^1.5.6",
+    "leaflet": "^1.9.4",
+    "leaflet.markercluster": "^1.5.3",
+    "maplibre-gl": "^6.6.0",
     "next": "16.3.0",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "react-icons": "^5.7.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/leaflet": "^1.9.22",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
