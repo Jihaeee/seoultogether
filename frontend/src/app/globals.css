@@ -388,7 +388,9 @@ button {
   padding: var(--space-3) var(--space-5);
   display: flex;
   align-items: center;
-  gap: var(--space-5);
+  /* 태그라인이 브랜드 락업 아래 자기 줄로 내려앉게 한다(`flex-basis: 100%`). */
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
 }
 
 .brand {
@@ -421,17 +423,15 @@ button {
   color: var(--ink);
 }
 
-/* 한 줄로 떨어져야 한다. 두 줄로 접히면 브랜드 락업과 시각적 무게가 비슷해져
-   헤더의 위계가 흐려진다.
+/* 브랜드 락업 오른쪽이 아니라 그 아래 줄을 통째로 쓴다 — 오른쪽에 두면 두세
+   줄로 접히면서 락업과 무게가 비슷해져 헤더의 위계가 흐려진다.
 
    폭을 `ch` 로 잡지 않는다. `ch` 는 숫자 `0` 의 폭(14px 기준 ~7.8px)이라
    한글에는 의미가 없다 — `48ch` 는 373px 로 계산되지만 한글 47자는 620px 을
-   쓰므로, 한 줄로 두려고 적은 값이 오히려 두 줄을 만들었다. 한글 1자는 폰트
-   크기와 거의 같으므로 `em` 으로 센다. */
+   쓴다. 한글 1자는 폰트 크기와 거의 같으므로 `em` 으로 센다. */
 .header-tagline {
-  margin-left: auto;
-  max-width: 26em;
-  text-align: right;
+  flex: 1 0 100%;
+  max-width: 58em;
   font-size: var(--text-sm);
   line-height: var(--leading);
   color: var(--muted);
