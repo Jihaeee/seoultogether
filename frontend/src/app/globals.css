@@ -388,16 +388,21 @@ button {
   padding: var(--space-3) var(--space-5);
   display: flex;
   align-items: center;
-  /* 태그라인이 브랜드 락업 아래 자기 줄로 내려앉게 한다(`flex-basis: 100%`). */
-  flex-wrap: wrap;
-  gap: var(--space-2) var(--space-5);
+  gap: var(--space-5);
 }
 
 .brand {
   display: flex;
-  align-items: center;
+  /* 가운데가 아니라 위 맞춤이다. 설명문이 들어오면서 텍스트 기둥이 95px 로
+     자랐는데, 가운데 맞춤이면 44px 아이콘이 제목에서 25px 아래로 내려가 이름
+     옆이 아니라 문단 옆에 뜬 것처럼 보인다. 위 맞추면 아이콘이 눈썹줄~제목
+     높이를 그대로 덮는다 — 설명문이 없던 때의 관계와 같다. */
+  align-items: flex-start;
   gap: var(--space-3);
   min-width: 0;
+  /* 설명문이 들어오면서 락업이 헤더 폭을 다 쓴다. 늘어나지 못하면 설명문의
+     줄바꿈 폭이 제목 길이에 묶인다. */
+  flex: 1 1 auto;
 }
 
 .brand-text {
@@ -423,18 +428,22 @@ button {
   color: var(--ink);
 }
 
-/* 브랜드 락업 오른쪽이 아니라 그 아래 줄을 통째로 쓴다 — 오른쪽에 두면 두세
-   줄로 접히면서 락업과 무게가 비슷해져 헤더의 위계가 흐려진다.
+/* 눈썹줄 · 제목 바로 아래, 같은 왼쪽 선에서 시작하는 설명문.
 
    폭을 `ch` 로 잡지 않는다. `ch` 는 숫자 `0` 의 폭(14px 기준 ~7.8px)이라
    한글에는 의미가 없다 — `48ch` 는 373px 로 계산되지만 한글 47자는 620px 을
    쓴다. 한글 1자는 폰트 크기와 거의 같으므로 `em` 으로 센다. */
 .header-tagline {
-  flex: 1 0 100%;
-  max-width: 58em;
+  margin-top: var(--space-1);
+  /* 이 폭이면 76자가 두 줄로 떨어진다. 더 넓게 두면 첫 줄이 화면 끝까지
+     달리다가 마지막 한 어절만 둘째 줄에 남아(`보세요.`) 잘린 것처럼 보였다. */
+  max-width: 42em;
   font-size: var(--text-sm);
   line-height: var(--leading);
   color: var(--muted);
+  /* 두 줄의 길이를 비슷하게 맞춘다. 고아 줄을 막는 것이 이 한 줄의 목적이라,
+     지원하지 않는 브라우저에서는 무시돼도 위 `max-width` 가 이미 막고 있다. */
+  text-wrap: balance;
 }
 
 .shell {

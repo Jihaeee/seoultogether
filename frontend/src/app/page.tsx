@@ -196,19 +196,18 @@ export default function Home() {
         <div className="site-header-inner">
           <div className="brand">
             <BrandIcon size={iconSize.lg} className="icon-badge" aria-hidden />
+            {/* 설명문은 락업 바깥이 아니라 안에 둔다. 밖에 두면 컨테이너 왼쪽
+                끝에서 시작해 아이콘 아래로 튀어나오고, 눈썹줄·제목과 왼쪽 선이
+                어긋나 락업이 깨져 보인다. 여기 있으면 세 줄이 한 기둥으로 선다. */}
             <span className="brand-text">
               <span className="brand-eyebrow">청년기획봉사 · 영유아 부모 캠페인</span>
               <h1 className="brand-name">위례 아이편한 지도</h1>
+              <p className="header-tagline">
+                위례동과 인접 생활권에서 아이와 함께 이동할 때 필요한 수유실, 경사로,
+                엘리베이터와 영유아 친화 식당 50곳의 정보를 한눈에 확인해 보세요.
+              </p>
             </span>
           </div>
-          {/* 브랜드 락업 오른쪽이 아니라 그 아래 한 줄을 통째로 쓴다. 이 길이
-              (76자)는 어떻게 해도 한 줄에 앉지 않는데, 오른쪽에 두면 두세 줄로
-              접히면서 락업과 시각적 무게가 비슷해져 헤더의 위계가 흐려진다.
-              폭을 다 쓰면 접히는 줄 수가 줄고, 읽는 순서도 이름 → 설명이 된다. */}
-          <p className="header-tagline">
-            위례동과 인접 생활권에서 아이와 함께 이동할 때 필요한 수유실, 경사로, 엘리베이터와
-            영유아 친화 식당 50곳의 정보를 한눈에 확인해 보세요.
-          </p>
         </div>
       </header>
 
