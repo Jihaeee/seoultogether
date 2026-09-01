@@ -1,4 +1,3 @@
-import { distanceM } from "./geo";
 import type { LatLng } from "./geo";
 
 /**
@@ -73,26 +72,22 @@ export interface WalkRoute {
 export type RouteFetchFailure =
   /** 계단을 피해서는 갈 길이 없다. 일반 도보로 물러설지 물어봐야 한다. */
   | "noroute"
-  /** 걸어갈 거리가 아니다. 다시 눌러도 같은 답이라 재시도 버튼을 주지 않는다. */
+  /**
+   * 라우터가 거리를 이유로 거절했다(`error_code 154`, 보행 상한 200km).
+   *
+   * 예전에는 5km 짜리 자체 상한을 두고 그 위를 여기서 막았다. 걸어서 갈 만한
+   * 거리가 아닌 곳에 경로를 그려 주면 강 위를 걸으라는 안내처럼 보인다는
+   * 이유였는데, 멀어도 일단 길이 보이는 편이 낫다는 판단으로 걷어냈다. 이제
+   * 거리 판단은 결과 카드의 소요시간이 대신한다 — 5시간 45분이라고 적혀
+   * 있으면 걸어갈 거리가 아니라는 것은 사용자가 안다.
+   *
+   * 다시 눌러도 같은 답이라 재시도 버튼을 주지 않는다.
+   */
   | "toofar"
   /** 시한 초과. 서버가 느린 것이니 기다렸다 다시. */
   | "timeout"
   /** 그 밖의 통신 실패. 내 인터넷을 봐야 한다. */
   | "network";
-
-/**
- * 이 직선거리를 넘으면 요청하지 않는다.
- *
- * 공개 인스턴스의 보행 상한은 200km 지만(그 위는 `error_code 154`), 그 값을
- * 그대로 쓰면 안 된다. 강북에서 길찾기를 누르면 라우터는 **20.4km · 5시간
- * 45분** 짜리 도보 경로를 성실하게 그려 주고, 그 선이 한강 다리를 건너므로
- * 지도에서는 강 위를 걸으라는 안내처럼 보인다. 계산이 틀린 게 아니라 애초에
- * 물어보면 안 되는 질문이었다.
- *
- * 5km 는 이 속도(3.5km/h)로 약 85분이다. 유모차를 밀고 그 이상 걷는 것은
- * 계획이 아니므로, 넘으면 경로 대신 네이버 지도로 넘긴다.
- */
-const MAX_ROUTE_DISTANCE_M = 5_000;
 
 export class RouteFetchError extends Error {
   constructor(readonly reason: RouteFetchFailure) {
@@ -228,12 +223,6 @@ export async function fetchWalkRoute(
   to: LatLng,
   { avoidStairs = true, signal }: WalkRouteOptions = {}
 ): Promise<WalkRoute> {
-  // 직선거리로 먼저 거른다. 도보 경로는 직선보다 늘 길므로, 직선이 이미
-  // 한계를 넘었다면 요청해 볼 것도 없다.
-  if (distanceM(from, to) > MAX_ROUTE_DISTANCE_M) {
-    throw new RouteFetchError("toofar");
-  }
-
   const body = {
     locations: [
       { lat: from.lat, lon: from.lng },

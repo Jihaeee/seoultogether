@@ -558,8 +558,12 @@ type RouteFailure = "denied" | "position" | RouteFetchFailure;
  * valhalla1.openstreetmap.de 는 무료 공개 인스턴스라 SLA 가 없고, 느려질 때는
  * 응답이 오지 않는 게 아니라 아주 늦게 온다. 시한이 없으면 "경로 찾는 중…"
  * 이 영원히 돌고, 사용자는 앱이 멈춘 줄 안다.
+ *
+ * 12초였다. 거리 상한(5km)을 걷어내면서 20초로 늘렸다 — 수십 km 짜리 보행
+ * 경로는 탐색 자체가 길어서, 예전 시한이면 서버가 멀쩡한데도 시한 초과로
+ * 끊긴다. 그러면 "멀어도 길찾기" 가 "멀면 실패" 로 되돌아간다.
  */
-const ROUTE_TIMEOUT_MS = 12_000;
+const ROUTE_TIMEOUT_MS = 20_000;
 
 type RouteState =
   | { kind: "idle" }
@@ -574,7 +578,7 @@ const ROUTE_ERROR_TEXT: Record<RouteFailure, string> = {
   network: "경로를 가져오지 못했어요. 인터넷 연결을 확인해 주세요.",
   timeout: "경로 서버가 응답하지 않아요. 잠시 후 다시 시도해 주세요.",
   noroute: "계단을 피해 갈 수 있는 길을 찾지 못했어요.",
-  toofar: "여기서 걸어가기엔 너무 멀어요. 대중교통은 네이버 지도에서 확인해 주세요.",
+  toofar: "경로 서버가 다루는 거리를 넘었어요. 대중교통은 네이버 지도에서 확인해 주세요.",
 };
 
 /** 다시 눌러 볼 만한 실패인가. 같은 답이 돌아올 실패에는 버튼을 주지 않는다. */
